@@ -3,8 +3,8 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React, { useState } from 'react';
-import './index.css'; 
-
+import './index.css';
+import HouseSelector from './HouseSelector';
 
 const houseData = [
   { id: 1, name: 'House Monty Python', score: 0, emoji: '🐍' },
@@ -14,18 +14,27 @@ const houseData = [
 ];
 
 function App() {
-  
   const [gameState, setGameState] = useState('start');
   const [houses, setHouses] = useState(houseData);
   const [userChoice, setUserChoice] = useState(null);
 
-  
+  const handleHouseChoice = (houseName) => {
+    setUserChoice(houseName);
+    setGameState('challenge-1');
+  };
+
   return (
     <div className="App">
       <h1 style={{ color: 'white' }}>Joust Simulator</h1>
-      {/* Placeholders*/}
-      {/* Placeholders*/}
-      <p style={{ color: 'white' }}>Welcome to the great jousting tournament!</p>
+      
+      {gameState === 'start' && (
+        <HouseSelector houses={houses} onSelect={handleHouseChoice} />
+      )}
+
+      {gameState !== 'start' && (
+        <p style={{ color: 'white' }}>Your choice: {userChoice}. The challenges will begin shortly!</p>
+      )}
+
     </div>
   );
 }
