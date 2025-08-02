@@ -1,11 +1,11 @@
 // Gustavo Corona
-// src/HouseCard.jsx made August 1, 2025
+// src/HouseCard.jsx made August 2, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
 import { useState } from 'react';
 
-function HouseCard({ name, emoji, onSelect }) {
+function HouseCard({ name, emoji, shieldImage, onSelect }) { 
   const [isHovered, setIsHovered] = useState(false);
 
   const cardStyle = {
@@ -22,8 +22,9 @@ function HouseCard({ name, emoji, onSelect }) {
     boxShadow: isHovered ? '0 0 15px rgba(255,255,255,0.2)' : 'none',
   };
 
-  const emojiStyle = {
-    fontSize: '3rem',
+  const imageStyle = {
+    width: '100px',
+    height: '100px',
     marginBottom: '10px',
   };
 
@@ -39,7 +40,7 @@ function HouseCard({ name, emoji, onSelect }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={emojiStyle}>{emoji}</div>
+      <img src={shieldImage} alt={`${name} shield`} style={imageStyle} /> 
       <div style={nameStyle}>{name}</div>
     </div>
   );

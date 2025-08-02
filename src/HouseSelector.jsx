@@ -1,5 +1,5 @@
 // Gustavo Corona
-// src/HouseSelector.jsx made August 1, 2025
+// src/HouseSelector.jsx made August 2, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
@@ -16,6 +16,7 @@ function HouseSelector({ houses, onSelect }) {
             key={house.id}
             name={house.name}
             emoji={house.emoji}
+            shieldImage={house.shieldImage} 
             onSelect={onSelect}
           />
         ))}
