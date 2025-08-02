@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Gustavo Corona
+// src/App.jsx made August 1, 2025
+// GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
+
+import React, { useState } from 'react';
+import './index.css'; 
+
+
+const houseData = [
+  { id: 1, name: 'House Monty Python', score: 0, emoji: '🐍' },
+  { id: 2, name: 'House Javaskript', score: 0, emoji: '☕' },
+  { id: 3, name: 'The Ruby Order', score: 0, emoji: '💎' },
+  { id: 4, name: 'House Swiftwind', score: 0, emoji: '🐴' }
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  
+  const [gameState, setGameState] = useState('start');
+  const [houses, setHouses] = useState(houseData);
+  const [userChoice, setUserChoice] = useState(null);
 
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <h1 style={{ color: 'white' }}>Joust Simulator</h1>
+      {/* Placeholders*/}
+      {/* Placeholders*/}
+      <p style={{ color: 'white' }}>Welcome to the great jousting tournament!</p>
+    </div>
+  );
 }
 
-export default App
+export default App;
