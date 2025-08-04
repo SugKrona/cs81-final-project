@@ -2,12 +2,16 @@
 // src/App.jsx made August 2, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import HouseSelector from './HouseSelector';
 import CharacterDisplay from './CharacterDisplay';
+import Scoreboard from './Scoreboard';
+import ChallengeButton from './ChallengeButton';
+import FinalBattleDisplay from './FinalBattleDisplay';
+import RestartButton from './RestartButton';
 
-
+// Define the data for the four houses with detailed lore and character names
 const houseData = [
   { 
     id: 1, 
@@ -51,16 +55,69 @@ const houseData = [
   }
 ];
 
+// Define the three challenges
+const challenges = [
+  "The Great Tournament of Spears",
+  "The Tournament of the Obsidian Axe",
+  "The Gauntlet of Valor"
+];
+
 function App() {
   const [gameState, setGameState] = useState('start');
   const [houses, setHouses] = useState(houseData);
   const [userChoice, setUserChoice] = useState(null);
+  const [challengeMessage, setChallengeMessage] = useState('');
+  const [winner, setWinner] = useState(null);
+  const [finalists, setFinalists] = useState([]);
+  const [finalScores, setFinalScores] = useState([]); // NEW: Store final sorted scores
 
-  const handleHouseChoice = (houseName) => {
-    setUserChoice(houseName);
-    setGameState('challenge-1');
+  // NEW: Function to reset the game state and start over
+  const handleRestart = () => {
+    setGameState('start');
+    setHouses(houseData); // Reset house scores
+    setUserChoice(null);
+    setChallengeMessage('');
+    setWinner(null);
+    setFinalists([]);
+    setFinalScores([]);
   };
 
+  // This function handles the user's initial choice of house.
+  const handleHouseChoice = (houseName) => {
+    setUserChoice(houseName);
+    setGameState('pre-challenge-1');
+  };
+
+  // This function is triggered by a button click to run a challenge.
+  const handleStartChallenge = (challengeIndex) => {
+    setChallengeMessage(`--- Challenge ${challengeIndex + 1}: ${challenges[challengeIndex]} ---`);
+    const updatedHouses = houses.map(house => {
+      const points = Math.floor(Math.random() * 5) + 1;
+      return { ...house, score: house.score + points };
+    });
+    setHouses(updatedHouses);
+    // Move to the next challenge state
+    if (challengeIndex < 2) {
+      setGameState(`pre-challenge-${challengeIndex + 2}`);
+    } else {
+      setGameState('final-battle');
+    }
+  };
+
+  // This function is triggered to run the final battle.
+  const handleFinalBattle = () => {
+    setChallengeMessage("--- The Final Battle Begins! ---");
+    // Sort houses by score to find the top two
+    const sortedHouses = [...houses].sort((a, b) => b.score - a.score);
+    const topTwo = sortedHouses.slice(0, 2);
+    setFinalists(topTwo);
+    setFinalScores(sortedHouses); // Store the full sorted list
+
+    // Randomly select a winner from the top two
+    const battleWinner = Math.random() < 0.5 ? topTwo[0].name : topTwo[1].name;
+    setWinner(battleWinner);
+    setGameState('results');
+  };
 
   const chosenHouse = houses.find(house => house.name === userChoice);
 
@@ -72,13 +129,53 @@ function App() {
         <HouseSelector houses={houses} onSelect={handleHouseChoice} />
       )}
 
-      {gameState !== 'start' && chosenHouse && (
-        <CharacterDisplay
-          riderName={chosenHouse.riderName}
-          squireName={chosenHouse.squireName}
-          lore={chosenHouse.lore}
-          shieldImage={chosenHouse.shieldImage} 
-        />
+      {gameState === 'pre-challenge-1' && chosenHouse && (
+        <>
+          <CharacterDisplay
+            riderName={chosenHouse.riderName}
+            squireName={chosenHouse.squireName}
+            lore={chosenHouse.lore}
+            shieldImage={chosenHouse.shieldImage}
+          />
+          <ChallengeButton challengeName={challenges[0]} onStart={() => handleStartChallenge(0)} />
+        </>
+      )}
+
+      {/* Challenge 1 Display */}
+      {gameState === 'pre-challenge-2' && (
+        <>
+          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
+          <ChallengeButton challengeName={challenges[1]} onStart={() => handleStartChallenge(1)} />
+        </>
+      )}
+
+      {/* Challenge 2 Display */}
+      {gameState === 'pre-challenge-3' && (
+        <>
+          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
+          <ChallengeButton challengeName={challenges[2]} onStart={() => handleStartChallenge(2)} />
+        </>
+      )}
+
+      {/* Challenge 3 Display & Final Battle Button */}
+      {gameState === 'final-battle' && (
+        <>
+          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
+          <ChallengeButton challengeName="The Final Battle" onStart={handleFinalBattle} />
+        </>
+      )}
+
+      {/* Final Results Display */}
+      {gameState === 'results' && finalists && (
+        <>
+          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <Scoreboard houses={finalScores} userChoice={userChoice} finalists={finalists} winner={winner} /> {/* UPDATED: pass finalScores */}
+          <FinalBattleDisplay finalists={finalists} winner={winner} />
+          <RestartButton onRestart={handleRestart} />
+        </>
       )}
     </div>
   );
