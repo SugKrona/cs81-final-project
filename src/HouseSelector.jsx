@@ -1,11 +1,12 @@
 // Gustavo Corona
-// src/HouseSelector.jsx made August 2, 2025
+// src/HouseSelector.jsx made August 4, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
 import HouseCard from './HouseCard';
 
-
+// Defines a component to display all houses for the user to choose.
+// It receives the list of houses (data) and a function to handle the choice (onSelect) as props.
 function HouseSelector({ houses, onSelect }) {
   return (
     <div style={{ textAlign: 'center' }}>
@@ -15,8 +16,7 @@ function HouseSelector({ houses, onSelect }) {
           <HouseCard
             key={house.id}
             name={house.name}
-            emoji={house.emoji}
-            shieldImage={house.shieldImage} 
+            shieldImage={house.shieldImage}
             onSelect={onSelect}
           />
         ))}

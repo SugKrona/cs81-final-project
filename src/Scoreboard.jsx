@@ -4,17 +4,16 @@
 
 import React from 'react';
 
-// Defines a component to display the scores of all houses.
-// It receives the list of houses (data) and the user's choice as props.
 function Scoreboard({ houses, userChoice, finalists = [], winner }) {
   const scoreboardStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(184, 169, 150, 0.9)', 
     padding: '20px',
     borderRadius: '10px',
-    color: 'white',
+    color: '#333', 
     maxWidth: '600px',
     margin: '20px auto',
-    textAlign: 'left'
+    textAlign: 'left',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
   };
 
   const listStyle = {
@@ -49,13 +48,23 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
           const isEliminated = finalists.length > 0 && !finalists.some(finalist => finalist.name === house.name);
 
           let emoji = '';
-          if (isWinner) emoji = ' 🏆';
-          if (isSecondPlace) emoji = ' 💀';
-          if (isEliminated) emoji = ''; // NEW: No emoji for 3rd and 4th place
-
+          if (isWinner) {
+            emoji = ' 🏆';
+          } else if (isSecondPlace) {
+            emoji = ' 💀';
+          }
+          
           let style = {};
-          if (isUserChoice) style = highlightStyle;
-          if (isEliminated || isSecondPlace) style = { ...style, ...losingStyle };
+          if (isUserChoice) {
+            style = highlightStyle;
+          }
+
+          if (isEliminated || isSecondPlace) {
+            style = { ...style, ...losingStyle };
+          }
+          if (isWinner) {
+            style = { ...style, color: '#ffc107', textDecoration: 'none' };
+          }
 
           return (
             <li key={house.id} style={{ ...scoreItemStyle, ...style }}>

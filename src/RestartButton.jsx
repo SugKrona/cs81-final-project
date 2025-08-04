@@ -1,5 +1,5 @@
 // Gustavo Corona
-// src/RestartButton.jsx made August , 2025
+// src/RestartButton.jsx made August 3, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
