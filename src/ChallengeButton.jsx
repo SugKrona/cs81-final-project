@@ -3,18 +3,19 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
+import styles from './App.module.css';
 
-function ChallengeButton({ challengeName, onStart }) {
+function ChallengeButton({ challengeName, onStart, playSelectionSound }) { // playSelectionSound is now an optional prop
   const buttonStyle = {
-    backgroundColor: '#007bff',
+    backgroundColor: '#4A2C2A',
     color: 'white',
     border: 'none',
-    padding: '12px 24px',
+    padding: '20px 40px',
     borderRadius: '8px',
-    fontSize: '1.2rem',
-    cursor: 'pointer',
+    fontSize: '2.5rem',
     marginTop: '20px',
     transition: 'background-color 0.2s',
+    fontFamily: 'Enchanted Land, sans-serif'
   };
 
   const textStyle = {
@@ -26,7 +27,16 @@ function ChallengeButton({ challengeName, onStart }) {
   return (
     <div style={{ textAlign: 'center' }}>
       <p style={textStyle}>{challengeName}</p>
-      <button style={buttonStyle} onClick={onStart}>
+      <button 
+        className={styles.buttonHoverCursor} 
+        style={buttonStyle} 
+        onClick={() => {
+          if (playSelectionSound) { // FIXED: Safely check if the prop exists before calling it
+            playSelectionSound();
+          }
+          onStart();
+        }}
+      >
         Start Challenge
       </button>
     </div>

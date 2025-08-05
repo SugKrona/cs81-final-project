@@ -6,10 +6,10 @@ import React from 'react';
 
 function FinalBattleDisplay({ finalists, winner }) {
   const displayStyle = {
-    backgroundColor: '#e0d3c6', 
+    backgroundColor: 'rgba(184, 169, 150, 0.9)',
     padding: '20px',
     borderRadius: '10px',
-    color: '#333', 
+    color: '#333',
     maxWidth: '600px',
     margin: '20px auto',
     textAlign: 'center',
@@ -17,20 +17,60 @@ function FinalBattleDisplay({ finalists, winner }) {
   };
 
   const finalistNameStyle = {
-    fontSize: '1.5rem',
+    fontSize: '2.5rem',
     fontWeight: 'bold',
     color: '#333', 
   };
+  
+  const winnerCharacterStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '20px',
+    gap: '20px',
+    border: '2px solid #555',
+    borderRadius: '10px',
+    padding: '10px'
+  };
 
+  const characterImageStyle = {
+    width: '100px',
+    height: '100px',
+    objectFit: 'cover'
+  };
+
+  // Find the loser from the finalists array
+  const loser = finalists.find(house => house.name !== winner.name);
+  
   return (
     <div style={displayStyle}>
-      <h3 style={{ fontSize: '1.8rem', color: '#333', marginBottom: '20px' }}>Final Battle!</h3>
-      <p style={{ fontSize: '1.2rem', marginBottom: '10px' }}>
+      <h3 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>Final Battle!</h3>
+      <p style={{ fontSize: '2rem', marginBottom: '10px' }}>
         A final clash between the two great houses: <span style={finalistNameStyle}>{finalists[0].name}</span> and <span style={finalistNameStyle}>{finalists[1].name}</span>!
       </p>
-      <h2 style={{ fontSize: '2rem', color: '#ffc107', marginTop: '30px' }}>
-        The Champion is: {winner} 🎉🏆
+      <h2 style={{ fontSize: '3.5rem', color: '#ffc107', marginTop: '30px' }}>
+        The Champion is: {winner.name} 🎉🏆
       </h2>
+      
+      <div style={winnerCharacterStyle}>
+          <div style={{ textAlign: 'center' }}>
+            <img src={winner.riderImage} alt={`${winner.riderName}`} style={characterImageStyle} />
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{winner.riderName}</p>
+            <p style={{ fontSize: '1rem', marginTop: '-10px' }}>The Knight</p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <img src={winner.squireImage} alt={`${winner.squireName}`} style={characterImageStyle} />
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{winner.squireName}</p>
+            <p style={{ fontSize: '1rem', marginTop: '-10px' }}>The Squire</p>
+          </div>
+      </div>
+      
+      {/* NEW: Display lore-friendly RIP note for the loser */}
+      {loser && (
+        <p style={{ fontSize: '1.5rem', marginTop: '20px', color: '#dc3545', fontStyle: 'italic' }}>
+          May the fallen knight, {loser.riderName}, find peace in the eternal halls of valor.
+        </p>
+      )}
     </div>
   );
 }

@@ -2,8 +2,9 @@
 // src/App.jsx made August 4, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './index.css';
+import styles from './App.module.css';
 import HouseSelector from './HouseSelector';
 import CharacterDisplay from './CharacterDisplay';
 import Scoreboard from './Scoreboard';
@@ -11,8 +12,10 @@ import ChallengeButton from './ChallengeButton';
 import FinalBattleDisplay from './FinalBattleDisplay';
 import RestartButton from './RestartButton';
 import PreFinalBattle from './PreFinalBattle';
-import LoadingBar from './LoadingBar'; 
+import LoadingBar from './LoadingBar';
+import PreChallenge from './PreChallenge';
 
+// Define the data for the four houses with detailed lore and character names
 const houseData = [
   {
     id: 1,
@@ -64,10 +67,20 @@ const houseData = [
   }
 ];
 
+// Define the three challenges with names and descriptions
 const challenges = [
-  "The Great Tournament of Spears",
-  "The Tournament of the Obsidian Axe",
-  "The Gauntlet of Valor"
+  {
+    name: "The Great Tournament of Spears",
+    description: "Knights will clash in a test of pure skill and bravery. A true test of a house's martial prowess."
+  },
+  {
+    name: "The Tournament of the Obsidian Axe",
+    description: "A brutal melee where only the strongest will survive. This challenge favors raw power and grit."
+  },
+  {
+    name: "The Gauntlet of Valor",
+    description: "A race through treacherous terrain, where speed and cunning are the keys to victory. A test of wits and agility."
+  }
 ];
 
 function App() {
@@ -80,41 +93,62 @@ function App() {
   const [finalScores, setFinalScores] = useState([]);
   const [eliminatedHouses, setEliminatedHouses] = useState([]);
 
+  // Create audio element references
+  const mainThemeAudioRef = useRef(null);
+  const loadingJingleAudioRef = useRef(null);
+  const selectionSoundAudioRef = useRef(null);
+  const cheersAudioRef = useRef(null); // NEW: Reference for cheers sound
+
+  // Use an effect to control loading music
+  useEffect(() => {
+    if (gameState === 'challenge-running' || gameState === 'final-battle-running') {
+      loadingJingleAudioRef.current.play();
+    } else {
+      loadingJingleAudioRef.current.pause();
+      loadingJingleAudioRef.current.currentTime = 0; // Rewind the audio
+    }
+  }, [gameState]);
+
+  // NEW: Use an effect to play cheers when results are displayed
+  useEffect(() => {
+    if (gameState === 'results') {
+      cheersAudioRef.current.play();
+    }
+  }, [gameState]);
+
+  const playSelectionSound = () => {
+    if (selectionSoundAudioRef.current) {
+      selectionSoundAudioRef.current.currentTime = 0; // Rewind to start
+      selectionSoundAudioRef.current.play();
+    }
+  };
+
   const handleHouseChoice = (houseName) => {
+    playSelectionSound();
     setUserChoice(houseName);
     setGameState('pre-challenge-1');
   };
 
   const handleStartChallenge = (challengeIndex) => {
-    setChallengeMessage(`--- Challenge ${challengeIndex + 1}: ${challenges[challengeIndex]} ---`);
-    setGameState('challenge-running'); 
+    playSelectionSound();
+    setChallengeMessage(`--- Challenge ${challengeIndex + 1}: ${challenges[challengeIndex].name} ---`);
+    setGameState('challenge-running');
     setTimeout(() => {
       const updatedHouses = houses.map(house => {
         const points = Math.floor(Math.random() * 5) + 1;
         return { ...house, score: house.score + points };
       });
       setHouses(updatedHouses);
-      if (challengeIndex < 2) {
-        setGameState(`post-challenge-${challengeIndex + 1}`); 
+      if (challengeIndex < challenges.length - 1) {
+        setGameState(`post-challenge-${challengeIndex + 1}`);
       } else {
-        setGameState('pre-final-battle');
+        setGameState('post-challenge-3');
       }
-    }, 3000); 
-  };
-
-  const handleFinalBattle = () => {
-    setChallengeMessage("--- The Final Battle Begins! ---");
-    const sortedHouses = [...houses].sort((a, b) => b.score - a.score);
-    const topTwo = sortedHouses.slice(0, 2);
-    setFinalists(topTwo);
-    setFinalScores(sortedHouses); 
-
-    const battleWinner = Math.random() < 0.5 ? topTwo[0].name : topTwo[1].name;
-    setWinner(battleWinner);
-    setGameState('results');
+    }, 3000);
   };
 
   const handlePreFinalBattle = () => {
+    playSelectionSound();
     const sortedHouses = [...houses].sort((a, b) => b.score - a.score);
     const topTwo = sortedHouses.slice(0, 2);
     const bottomTwo = sortedHouses.slice(2, 4);
@@ -123,7 +157,28 @@ function App() {
     setGameState('final-battle');
   };
 
+  const handleFinalBattle = () => {
+    playSelectionSound();
+    setChallengeMessage("--- The Final Battle Begins! ---");
+    setGameState('final-battle-running');
+    
+    setTimeout(() => {
+        const battleWinnerObject = Math.random() < 0.5 ? finalists[0] : finalists[1];
+        setWinner(battleWinnerObject);
+        
+        const finalSortedScores = [...houses].sort((a, b) => {
+          if (a.name === battleWinnerObject.name) return -1;
+          if (b.name === battleWinnerObject.name) return 1;
+          return b.score - a.score;
+        });
+
+        setFinalScores(finalSortedScores);
+        setGameState('results');
+    }, 3000);
+  };
+
   const handleRestart = () => {
+    playSelectionSound();
     setGameState('start');
     setHouses(houseData);
     setUserChoice(null);
@@ -132,25 +187,33 @@ function App() {
     setFinalists([]);
     setFinalScores([]);
     setEliminatedHouses([]);
+    // NEW: Stop cheers audio when restarting
+    if (cheersAudioRef.current) {
+        cheersAudioRef.current.pause();
+        cheersAudioRef.current.currentTime = 0;
+    }
   };
 
   const chosenHouse = houses.find(house => house.name === userChoice);
 
   return (
-    <div className="App">
-      <h1 style={{ color: 'white' }}>Joust Simulator</h1>
+    <div className={styles.appContainer}>
+      <h1 style={{ color: 'white', textAlign: 'center' }}>Joust Simulator</h1>
 
+      {/* Start State */}
       {gameState === 'start' && (
-        <HouseSelector houses={houses} onSelect={handleHouseChoice} />
+        <HouseSelector houses={houses} onSelect={handleHouseChoice} playSelectionSound={playSelectionSound} />
       )}
 
+      {/* Loading Bar State */}
       {gameState === 'challenge-running' && (
         <div style={{ textAlign: 'center', margin: '20px' }}>
-          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>The challenge is underway!</p>
-          <LoadingBar />
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The challenge is underway!</p>
+          <LoadingBar loadingGif="/images/Loading-1.gif" />
         </div>
       )}
 
+      {/* Pre-Challenge 1 */}
       {gameState === 'pre-challenge-1' && chosenHouse && (
         <>
           <CharacterDisplay
@@ -161,44 +224,84 @@ function App() {
             riderImage={chosenHouse.riderImage}
             squireImage={chosenHouse.squireImage}
           />
-          <ChallengeButton challengeName={challenges[0]} onStart={() => handleStartChallenge(0)} />
+          <PreChallenge
+            challengeName={challenges[0].name}
+            challengeDescription={challenges[0].description}
+            onStart={() => handleStartChallenge(0)}
+            playSelectionSound={playSelectionSound}
+          />
         </>
       )}
 
+      {/* Post-Challenge 1 / Pre-Challenge 2 */}
       {gameState === 'post-challenge-1' && (
         <>
-          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
-          <ChallengeButton challengeName={challenges[1]} onStart={() => handleStartChallenge(1)} />
+          <PreChallenge
+            challengeName={challenges[1].name}
+            challengeDescription={challenges[1].description}
+            onStart={() => handleStartChallenge(1)}
+            playSelectionSound={playSelectionSound}
+          />
         </>
       )}
 
-  
+      {/* Post-Challenge 2 / Pre-Challenge 3 */}
       {gameState === 'post-challenge-2' && (
         <>
-          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
-          <ChallengeButton challengeName={challenges[2]} onStart={() => handleStartChallenge(2)} />
+          <PreChallenge
+            challengeName={challenges[2].name}
+            challengeDescription={challenges[2].description}
+            onStart={() => handleStartChallenge(2)}
+            playSelectionSound={playSelectionSound}
+          />
         </>
       )}
 
-      {gameState === 'pre-final-battle' && (
+      {/* Post-Challenge 3 - Shows the final scoreboard and a button to proceed to qualifiers */}
+      {gameState === 'post-challenge-3' && (
         <>
-          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>The challenges are complete! It's time to see the finalists...</p>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
-          <PreFinalBattle eliminatedHouses={eliminatedHouses} finalists={finalists} />
-          <ChallengeButton challengeName="Start Final Battle" onStart={handleFinalBattle} />
+          <ChallengeButton challengeName="View the Qualifiers" onStart={handlePreFinalBattle} playSelectionSound={playSelectionSound} />
         </>
       )}
 
+      {/* Final Battle Display with Qualifiers */}
+      {gameState === 'final-battle' && (
+        <>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
+          <PreFinalBattle eliminatedHouses={eliminatedHouses} finalists={finalists} />
+          <ChallengeButton challengeName="The Final Battle" onStart={handleFinalBattle} playSelectionSound={playSelectionSound} />
+        </>
+      )}
+      
+      {/* Loading Bar for the Final Battle */}
+      {gameState === 'final-battle-running' && (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The final battle is underway!</p>
+          <LoadingBar loadingGif="/images/Loading-1.gif" />
+        </div>
+      )}
+
+      {/* Final Results Display */}
       {gameState === 'results' && finalists && (
         <>
-          <p style={{ color: 'white', fontSize: '1.5rem', marginBottom: '20px' }}>{challengeMessage}</p>
-          <Scoreboard houses={finalScores} userChoice={userChoice} finalists={finalists} winner={winner} />
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
+          <Scoreboard houses={finalScores} userChoice={userChoice} finalists={finalists} winner={winner.name} />
           <FinalBattleDisplay finalists={finalists} winner={winner} />
-          <RestartButton onRestart={handleRestart} />
+          <RestartButton onRestart={handleRestart} playSelectionSound={playSelectionSound} />
         </>
       )}
+      
+      {/* Audio Elements */}
+      <audio ref={mainThemeAudioRef} src="/main-theme.mp3" autoPlay loop className={styles.hiddenAudio} />
+      <audio ref={loadingJingleAudioRef} src="/loading-jingle.mp3" loop className={styles.hiddenAudio} />
+      <audio ref={selectionSoundAudioRef} src="/selection.mp3" className={styles.hiddenAudio} />
+      <audio ref={cheersAudioRef} src="/cheers.mp3" className={styles.hiddenAudio} /> {/* NEW Audio Element */}
     </div>
   );
 }

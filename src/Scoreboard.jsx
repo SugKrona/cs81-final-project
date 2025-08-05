@@ -12,7 +12,7 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
     color: '#333', 
     maxWidth: '600px',
     margin: '20px auto',
-    textAlign: 'left',
+    textAlign: 'center',
     boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
   };
 
@@ -24,7 +24,7 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
 
   const scoreItemStyle = {
     marginBottom: '10px',
-    fontSize: '1.2rem'
+    fontSize: '2rem'
   };
 
   const highlightStyle = {
@@ -43,14 +43,14 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
       <ul style={listStyle}>
         {[...houses].sort((a,b) => b.score - a.score).map(house => {
           const isWinner = house.name === winner;
-          const isSecondPlace = finalists.length > 0 && house.name === finalists[1].name;
+          const isFinalist = finalists.some(finalist => finalist.name === house.name);
+          const isFinalsLoser = isFinalist && !isWinner; // NEW: Check if the house is a finalist but not the winner
           const isUserChoice = house.name === userChoice;
-          const isEliminated = finalists.length > 0 && !finalists.some(finalist => finalist.name === house.name);
 
           let emoji = '';
           if (isWinner) {
             emoji = ' 🏆';
-          } else if (isSecondPlace) {
+          } else if (isFinalsLoser) { // UPDATED: Use the new condition
             emoji = ' 💀';
           }
           
@@ -59,11 +59,18 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
             style = highlightStyle;
           }
 
-          if (isEliminated || isSecondPlace) {
+          if (isFinalsLoser) { // UPDATED: Use the new condition
             style = { ...style, ...losingStyle };
           }
+          
           if (isWinner) {
             style = { ...style, color: '#ffc107', textDecoration: 'none' };
+          }
+
+          // If the house is eliminated (not a finalist), it should be crossed out.
+          const isEliminated = finalists.length > 0 && !isFinalist;
+          if (isEliminated) {
+            style = { ...style, ...losingStyle };
           }
 
           return (

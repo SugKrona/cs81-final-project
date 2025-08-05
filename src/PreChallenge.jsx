@@ -1,0 +1,38 @@
+// src/PreChallenge.jsx
+
+import React from 'react';
+import ChallengeButton from './ChallengeButton';
+
+function PreChallenge({ challengeName, challengeDescription, onStart }) {
+  const containerStyle = {
+    textAlign: 'center',
+    backgroundColor: 'rgba(184, 169, 150, 0.9)', 
+    color: '#333',
+    padding: '20px',
+    borderRadius: '10px',
+    maxWidth: '600px',
+    margin: '20px auto'
+  };
+
+  const titleStyle = {
+    // UPDATED: Increased font size
+    fontSize: '3rem',
+    marginBottom: '10px'
+  };
+
+  const descriptionStyle = {
+    // UPDATED: Increased font size
+    fontSize: '2rem',
+    marginBottom: '20px'
+  };
+
+  return (
+    <div style={containerStyle}>
+      <h2 style={titleStyle}>{challengeName}</h2>
+      <p style={descriptionStyle}>{challengeDescription}</p>
+      <ChallengeButton challengeName="" onStart={onStart} />
+    </div>
+  );
+}
+
+export default PreChallenge;

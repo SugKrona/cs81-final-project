@@ -1,30 +1,25 @@
 // Gustavo Corona
-// src/LoadingBar.jsx made August 4, 2025
+// src/LoadingBar.jsx made August 5, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
 
-function LoadingBar() {
+// Defines a component to display a simple loading animation.
+function LoadingBar({ loadingGif }) {
   const loadingBarStyle = {
-    width: '80%',
-    height: '20px',
-    backgroundColor: '#333',
-    border: '2px solid white',
-    borderRadius: '10px',
-    overflow: 'hidden',
+    textAlign: 'center',
     margin: '20px auto',
   };
 
-  const progressStyle = {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#007bff',
-    animation: 'load 3s linear forwards',
+  const imageStyle = {
+    width: '150px',
+    height: 'auto',
   };
 
   return (
     <div style={loadingBarStyle}>
-      <div style={progressStyle}></div>
+      <img src={loadingGif} alt="Knights Fighting Animation" style={imageStyle} />
+      <p style={{ color: 'white', fontSize: '1.5rem', marginTop: '10px' }}>The challenge is underway!</p>
     </div>
   );
 }

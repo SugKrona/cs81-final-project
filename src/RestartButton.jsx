@@ -3,23 +3,31 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
+import styles from './App.module.css';
 
-function RestartButton({ onRestart }) {
+function RestartButton({ onRestart, playSelectionSound }) { // NEW: Receive the prop
   const buttonStyle = {
-    backgroundColor: '#dc3545', 
+    backgroundColor: '#4A2C2A', 
     color: 'white',
     border: 'none',
-    padding: '12px 24px',
+    padding: '20px 40px',
     borderRadius: '8px',
-    fontSize: '1rem',
-    cursor: 'pointer',
+    fontSize: '2.5rem',
     marginTop: '30px',
     transition: 'background-color 0.2s',
+    fontFamily: 'Enchanted Land, sans-serif'
   };
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <button style={buttonStyle} onClick={onRestart}>
+      <button 
+        className={styles.buttonHoverCursor} 
+        style={buttonStyle} 
+        onClick={() => {
+          playSelectionSound();
+          onRestart();
+        }}
+      >
         Restart Simulation
       </button>
     </div>

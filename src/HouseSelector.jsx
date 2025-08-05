@@ -5,9 +5,7 @@
 import React from 'react';
 import HouseCard from './HouseCard';
 
-// Defines a component to display all houses for the user to choose.
-// It receives the list of houses (data) and a function to handle the choice (onSelect) as props.
-function HouseSelector({ houses, onSelect }) {
+function HouseSelector({ houses, onSelect, playSelectionSound }) { // NEW: Receive the prop
   return (
     <div style={{ textAlign: 'center' }}>
       <h2 style={{ color: 'white', marginBottom: '20px' }}>Choose Your House</h2>
@@ -17,7 +15,11 @@ function HouseSelector({ houses, onSelect }) {
             key={house.id}
             name={house.name}
             shieldImage={house.shieldImage}
-            onSelect={onSelect}
+            // NEW: Call the prop inside the onSelect function
+            onSelect={(name) => {
+              playSelectionSound();
+              onSelect(name);
+            }}
           />
         ))}
       </div>

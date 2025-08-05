@@ -4,12 +4,12 @@
 
 import React from 'react';
 
-function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage, squireImage }) { // ADDED: rider and squire images
+function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage, squireImage }) {
   const containerStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+    backgroundColor: 'rgba(184, 169, 150, 0.9)', 
     padding: '20px',
     borderRadius: '10px',
-    color: 'white',
+    color: '#333', 
     maxWidth: '600px',
     margin: '20px auto',
     textAlign: 'left'
@@ -25,13 +25,13 @@ function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage
   const characterImageStyle = {
     width: '80px',
     height: '80px',
-    borderRadius: '50%',
     objectFit: 'cover',
     marginRight: '15px'
   };
 
   const nameStyle = {
-    fontSize: '1.2rem',
+    // UPDATED: Increased font size
+    fontSize: '2rem',
     fontWeight: 'bold',
     marginBottom: '5px'
   };
@@ -50,7 +50,8 @@ function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage
         <p style={nameStyle}>The Squire: {squireName}</p>
       </div>
       <hr style={{ border: '1px solid #555', margin: '15px 0' }} />
-      <p style={{ fontSize: '1rem' }}>{lore}</p>
+      {/* UPDATED: Increased font size */}
+      <p style={{ fontSize: '1.5rem' }}>{lore}</p>
     </div>
   );
 }
