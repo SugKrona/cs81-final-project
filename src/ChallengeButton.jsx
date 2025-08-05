@@ -5,7 +5,7 @@
 import React from 'react';
 import styles from './App.module.css';
 
-function ChallengeButton({ challengeName, onStart, playSelectionSound }) { 
+function ChallengeButton({ challengeName, onStart }) {
   const buttonStyle = {
     backgroundColor: '#4A2C2A',
     color: 'white',
@@ -30,12 +30,7 @@ function ChallengeButton({ challengeName, onStart, playSelectionSound }) {
       <button 
         className={styles.buttonHoverCursor} 
         style={buttonStyle} 
-        onClick={() => {
-          if (playSelectionSound) { 
-            playSelectionSound();
-          }
-          onStart();
-        }}
+        onClick={onStart}
       >
         Start Challenge
       </button>

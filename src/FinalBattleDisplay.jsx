@@ -3,7 +3,7 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
-import styles from './App.module.css'; 
+import styles from './App.module.css';
 
 function FinalBattleDisplay({ finalists, winner }) {
   const displayStyle = {
@@ -40,7 +40,6 @@ function FinalBattleDisplay({ finalists, winner }) {
     objectFit: 'cover'
   };
 
-  // Find the loser from the finalists array
   const loser = finalists.find(house => house.name !== winner.name);
   
   return (

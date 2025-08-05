@@ -6,7 +6,6 @@ import React from 'react';
 import { useState } from 'react';
 import styles from './App.module.css';
 
-// Defines a reusable component to display a single house's details.
 function HouseCard({ name, shieldImage, onSelect }) {
   const [isHovered, setIsHovered] = useState(false);
 

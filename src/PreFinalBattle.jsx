@@ -40,9 +40,7 @@ function PreFinalBattle({ eliminatedHouses, finalists }) {
   
   return (
     <div style={displayStyle}>
-  
       <h3 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>The Qualifiers!</h3>
-  
       <p style={{ fontSize: '2rem', marginBottom: '10px' }}>
         The great houses of {eliminatedHouses.map(house => house.name).join(' and ')} have been eliminated.
       </p>
@@ -60,7 +58,6 @@ function PreFinalBattle({ eliminatedHouses, finalists }) {
         ))}
       </div>
       
-
       <p style={{ fontSize: '2rem' }}>
         The final battle between these two houses will be to the death!
       </p>

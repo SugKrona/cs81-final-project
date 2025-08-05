@@ -2,7 +2,6 @@
 /* src/index.css made August 4, 2025 */
 /* GitHub Repository URL: https://github.com/SugKrona/cs81-final-project */
 
-/* New: Custom Font Declaration */
 @font-face {
   font-family: 'Enchanted Land';
   src: url('/fonts/Enchanted Land.otf') format('opentype');
@@ -27,7 +26,6 @@ body {
   align-items: center;     
   
   font-family: 'Enchanted Land', sans-serif;
-  
   font-size: 2.5rem;
   
   background-image: url('/images/Arena.png'); 
@@ -39,6 +37,8 @@ body {
   color: #f8f8f8; 
   line-height: 1.5;
   font-weight: 400;
+  
+  cursor: url('/images/GLOVE CURSOR.cur'), auto;
 }
 
 

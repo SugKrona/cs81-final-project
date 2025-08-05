@@ -4,9 +4,12 @@
   cursor: url('/images/GLOVE CURSOR.cur'), auto;
 }
 
-
 .buttonHoverCursor:hover, .houseCard:hover {
   cursor: url('/images/GLOVE CURSOR 2.cur'), pointer;
+}
+
+.hiddenAudio {
+  display: none;
 }
 
 .logo {
@@ -50,7 +53,7 @@
     filter: drop-shadow(0 0 10px #ffffff);
   }
   50% {
-    filter: drop-shadow(0 0 20px #ffc107); 
+    filter: drop-shadow(0 0 20px #ffc107);
   }
   100% {
     filter: drop-shadow(0 0 10px #ffffff);
@@ -60,4 +63,17 @@
 .glowingElement {
   animation: glow-pulse 3s infinite ease-in-out;
   text-align: center;
+}
+
+.confettiForeground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/images/confetti.gif');
+  background-size: cover;
+  background-repeat: repeat;
+  z-index: 100;
+  pointer-events: none;
 }

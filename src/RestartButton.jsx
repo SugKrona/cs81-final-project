@@ -5,7 +5,7 @@
 import React from 'react';
 import styles from './App.module.css';
 
-function RestartButton({ onRestart, playSelectionSound }) { 
+function RestartButton({ onRestart }) {
   const buttonStyle = {
     backgroundColor: '#4A2C2A', 
     color: 'white',
@@ -23,10 +23,7 @@ function RestartButton({ onRestart, playSelectionSound }) {
       <button 
         className={styles.buttonHoverCursor} 
         style={buttonStyle} 
-        onClick={() => {
-          playSelectionSound();
-          onRestart();
-        }}
+        onClick={onRestart}
       >
         Restart Simulation
       </button>

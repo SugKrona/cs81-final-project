@@ -1,4 +1,6 @@
+// Gustavo Corona
 // src/PreChallenge.jsx
+// GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
 import ChallengeButton from './ChallengeButton';

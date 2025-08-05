@@ -37,7 +37,7 @@ const houseData = [
     shieldImage: '/images/HouseJavaskript.png',
     riderName: 'Duke Jax the Unyielding',
     squireName: 'Byte',
-    riderImage: '/images/Dukelax.png',
+    riderImage: '/images/Dukejax.png',
     squireImage: '/images/Byte.png',
     lore: "A new order that wields chaotic power from their three-headed dragon, breaking the logic of the old world. Their fearless rider, Duke Jax, a prodigy knight known for his agility, and his squire, Byte, who archives every battle detail, are the face of this powerful yet unpredictable force. They hail from a distant, futuristic land, and their modular magic allows them to adapt to any foe, making them a wild card in any tournament they enter."
   },
@@ -119,19 +119,16 @@ function App() {
   useEffect(() => {
     const mainThemeAudio = mainThemeAudioRef.current;
     if (mainThemeAudio) {
-        // Play the audio once the component mounts. Browser policies may still block this.
         mainThemeAudio.play().catch(error => {
             console.log("Autoplay was prevented. User interaction is needed.", error);
         });
         
-        // Add an event listener to restart the song when it ends
         const handleAudioEnded = () => {
             mainThemeAudio.play();
         };
 
         mainThemeAudio.addEventListener('ended', handleAudioEnded);
 
-        // Cleanup function to remove the event listener when the component unmounts
         return () => {
             mainThemeAudio.removeEventListener('ended', handleAudioEnded);
         };
@@ -140,7 +137,7 @@ function App() {
 
   const playSelectionSound = () => {
     if (selectionSoundAudioRef.current) {
-      selectionSoundAudioRef.current.currentTime = 0; 
+      selectionSoundAudioRef.current.currentTime = 0;
       selectionSoundAudioRef.current.play();
     }
   };
@@ -222,20 +219,27 @@ function App() {
       <h1 className={styles.glowingElement} style={{ color: 'white' }}>Joust Simulator</h1>
       <img className={styles.glowingElement} src="/images/titleknight.png" alt="Jousting Knight Title Logo" style={{ width: '150px', margin: '0 auto', display: 'block' }} />
 
-      {/* Start State */}
-      {gameState === 'start' && (
-        <HouseSelector houses={houses} onSelect={handleHouseChoice} playSelectionSound={playSelectionSound} />
+      {gameState === 'results' && (
+        <div className={styles.confettiForeground}></div>
       )}
 
-      {/* Loading State */}
+      {gameState === 'start' && (
+        <HouseSelector houses={houses} onSelect={handleHouseChoice} />
+      )}
+
       {gameState === 'challenge-running' && (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The challenge is underway!</p>
           <LoadingBar loadingGif="/images/Loading-1.gif" />
         </div>
       )}
+      {gameState === 'final-battle-running' && (
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The ultimate clash begins!</p>
+          <LoadingBar loadingGif="/images/Loading-1.gif" />
+        </div>
+      )}
 
-      {/* Pre-Challenge 1 */}
       {gameState === 'pre-challenge-1' && chosenHouse && (
         <>
           <CharacterDisplay
@@ -250,12 +254,10 @@ function App() {
             challengeName={challenges[0].name}
             challengeDescription={challenges[0].description}
             onStart={() => handleStartChallenge(0)}
-            playSelectionSound={playSelectionSound}
           />
         </>
       )}
 
-      {/* Post-Challenge 1 / Pre-Challenge 2 */}
       {gameState === 'post-challenge-1' && (
         <>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
@@ -264,12 +266,10 @@ function App() {
             challengeName={challenges[1].name}
             challengeDescription={challenges[1].description}
             onStart={() => handleStartChallenge(1)}
-            playSelectionSound={playSelectionSound}
           />
         </>
       )}
 
-      {/* Post-Challenge 2 / Pre-Challenge 3 */}
       {gameState === 'post-challenge-2' && (
         <>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
@@ -278,48 +278,35 @@ function App() {
             challengeName={challenges[2].name}
             challengeDescription={challenges[2].description}
             onStart={() => handleStartChallenge(2)}
-            playSelectionSound={playSelectionSound}
           />
         </>
       )}
 
-      {/* Post-Challenge 3 - Shows the final scoreboard and a button to proceed to qualifiers */}
       {gameState === 'post-challenge-3' && (
         <>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <Scoreboard houses={houses} userChoice={userChoice} finalists={[]} />
-          <ChallengeButton challengeName="View the Qualifiers" onStart={handlePreFinalBattle} playSelectionSound={playSelectionSound} />
+          <ChallengeButton challengeName="View the Qualifiers" onStart={handlePreFinalBattle} />
         </>
       )}
 
-      {/* Final Battle Display with Qualifiers */}
       {gameState === 'final-battle' && (
         <>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <PreFinalBattle eliminatedHouses={eliminatedHouses} finalists={finalists} />
-          <ChallengeButton challengeName="The Final Battle" onStart={handleFinalBattle} playSelectionSound={playSelectionSound} />
+          <ChallengeButton challengeName="The Final Battle" onStart={handleFinalBattle} />
         </>
       )}
       
-      {/* Loading Bar for the Final Battle */}
-      {gameState === 'final-battle-running' && (
-        <div style={{ textAlign: 'center', margin: '20px' }}>
-          <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The final battle is underway!</p>
-          <LoadingBar loadingGif="/images/Loading-1.gif" />
-        </div>
-      )}
-
-      {/* Final Results Display */}
       {gameState === 'results' && finalists && (
         <>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>{challengeMessage}</p>
           <Scoreboard houses={finalScores} userChoice={userChoice} finalists={finalists} winner={winner.name} />
           <FinalBattleDisplay finalists={finalists} winner={winner} />
-          <RestartButton onRestart={handleRestart} playSelectionSound={playSelectionSound} />
+          <RestartButton onRestart={handleRestart} />
         </>
       )}
       
-      {/* Audio Elements */}
       <audio ref={mainThemeAudioRef} src="/main-theme.mp3" autoPlay className={styles.hiddenAudio} />
       <audio ref={loadingJingleAudioRef} src="/loading-jingle.mp3" loop className={styles.hiddenAudio} />
       <audio ref={selectionSoundAudioRef} src="/selection.mp3" className={styles.hiddenAudio} />

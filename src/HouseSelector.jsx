@@ -5,7 +5,7 @@
 import React from 'react';
 import HouseCard from './HouseCard';
 
-function HouseSelector({ houses, onSelect, playSelectionSound }) { 
+function HouseSelector({ houses, onSelect }) {
   return (
     <div style={{ textAlign: 'center' }}>
       <h2 style={{ color: 'white', marginBottom: '20px' }}>Choose Your House</h2>
@@ -15,10 +15,7 @@ function HouseSelector({ houses, onSelect, playSelectionSound }) {
             key={house.id}
             name={house.name}
             shieldImage={house.shieldImage}
-            onSelect={(name) => {
-              playSelectionSound();
-              onSelect(name);
-            }}
+            onSelect={onSelect}
           />
         ))}
       </div>

@@ -1,5 +1,5 @@
 // Gustavo Corona
-// src/LoadingBar.jsx made August 5, 2025
+// src/LoadingBar.jsx made August 4, 2025
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
