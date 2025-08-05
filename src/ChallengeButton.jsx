@@ -5,7 +5,7 @@
 import React from 'react';
 import styles from './App.module.css';
 
-function ChallengeButton({ challengeName, onStart, playSelectionSound }) { // playSelectionSound is now an optional prop
+function ChallengeButton({ challengeName, onStart, playSelectionSound }) { 
   const buttonStyle = {
     backgroundColor: '#4A2C2A',
     color: 'white',
@@ -31,7 +31,7 @@ function ChallengeButton({ challengeName, onStart, playSelectionSound }) { // pl
         className={styles.buttonHoverCursor} 
         style={buttonStyle} 
         onClick={() => {
-          if (playSelectionSound) { // FIXED: Safely check if the prop exists before calling it
+          if (playSelectionSound) { 
             playSelectionSound();
           }
           onStart();

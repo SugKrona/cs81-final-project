@@ -3,6 +3,7 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
+import styles from './App.module.css'; 
 
 function FinalBattleDisplay({ finalists, winner }) {
   const displayStyle = {
@@ -48,24 +49,23 @@ function FinalBattleDisplay({ finalists, winner }) {
       <p style={{ fontSize: '2rem', marginBottom: '10px' }}>
         A final clash between the two great houses: <span style={finalistNameStyle}>{finalists[0].name}</span> and <span style={finalistNameStyle}>{finalists[1].name}</span>!
       </p>
-      <h2 style={{ fontSize: '3.5rem', color: '#ffc107', marginTop: '30px' }}>
+      <h2 className={styles.glowingElement} style={{ fontSize: '3.5rem', color: '#ffc107', marginTop: '30px' }}>
         The Champion is: {winner.name} 🎉🏆
       </h2>
       
       <div style={winnerCharacterStyle}>
           <div style={{ textAlign: 'center' }}>
-            <img src={winner.riderImage} alt={`${winner.riderName}`} style={characterImageStyle} />
+            <img className={styles.glowingElement} src={winner.riderImage} alt={`${winner.riderName}`} style={characterImageStyle} />
             <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{winner.riderName}</p>
             <p style={{ fontSize: '1rem', marginTop: '-10px' }}>The Knight</p>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <img src={winner.squireImage} alt={`${winner.squireName}`} style={characterImageStyle} />
+            <img className={styles.glowingElement} src={winner.squireImage} alt={`${winner.squireName}`} style={characterImageStyle} />
             <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{winner.squireName}</p>
             <p style={{ fontSize: '1rem', marginTop: '-10px' }}>The Squire</p>
           </div>
       </div>
       
-      {/* NEW: Display lore-friendly RIP note for the loser */}
       {loser && (
         <p style={{ fontSize: '1.5rem', marginTop: '20px', color: '#dc3545', fontStyle: 'italic' }}>
           May the fallen knight, {loser.riderName}, find peace in the eternal halls of valor.

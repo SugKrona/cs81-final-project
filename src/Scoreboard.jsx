@@ -3,6 +3,7 @@
 // GitHub Repository URL: https://github.com/SugKrona/cs81-final-project
 
 import React from 'react';
+import styles from './App.module.css'; 
 
 function Scoreboard({ houses, userChoice, finalists = [], winner }) {
   const scoreboardStyle = {
@@ -44,13 +45,13 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
         {[...houses].sort((a,b) => b.score - a.score).map(house => {
           const isWinner = house.name === winner;
           const isFinalist = finalists.some(finalist => finalist.name === house.name);
-          const isFinalsLoser = isFinalist && !isWinner; // NEW: Check if the house is a finalist but not the winner
+          const isFinalsLoser = isFinalist && !isWinner;
           const isUserChoice = house.name === userChoice;
 
           let emoji = '';
           if (isWinner) {
             emoji = ' 🏆';
-          } else if (isFinalsLoser) { // UPDATED: Use the new condition
+          } else if (isFinalsLoser) {
             emoji = ' 💀';
           }
           
@@ -59,22 +60,24 @@ function Scoreboard({ houses, userChoice, finalists = [], winner }) {
             style = highlightStyle;
           }
 
-          if (isFinalsLoser) { // UPDATED: Use the new condition
+          if (isFinalsLoser) {
             style = { ...style, ...losingStyle };
           }
           
           if (isWinner) {
-            style = { ...style, color: '#ffc107', textDecoration: 'none' };
+            style = { ...style, textDecoration: 'none' };
           }
 
-          // If the house is eliminated (not a finalist), it should be crossed out.
           const isEliminated = finalists.length > 0 && !isFinalist;
           if (isEliminated) {
             style = { ...style, ...losingStyle };
           }
+          
+    
+          const className = isWinner ? styles.glowingElement : '';
 
           return (
-            <li key={house.id} style={{ ...scoreItemStyle, ...style }}>
+            <li key={house.id} className={className} style={{ ...scoreItemStyle, ...style }}>
               {house.name}{isUserChoice ? ' ⭐' : ''}: {house.score} points{emoji}
             </li>
           );

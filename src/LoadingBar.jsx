@@ -4,7 +4,6 @@
 
 import React from 'react';
 
-// Defines a component to display a simple loading animation.
 function LoadingBar({ loadingGif }) {
   const loadingBarStyle = {
     textAlign: 'center',

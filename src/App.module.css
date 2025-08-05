@@ -5,7 +5,6 @@
 }
 
 
-
 .buttonHoverCursor:hover, .houseCard:hover {
   cursor: url('/images/GLOVE CURSOR 2.cur'), pointer;
 }
@@ -44,4 +43,21 @@
 
 .read-the_docs {
   color: #888;
+}
+
+@keyframes glow-pulse {
+  0% {
+    filter: drop-shadow(0 0 10px #ffffff);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px #ffc107); 
+  }
+  100% {
+    filter: drop-shadow(0 0 10px #ffffff);
+  }
+}
+
+.glowingElement {
+  animation: glow-pulse 3s infinite ease-in-out;
+  text-align: center;
 }

@@ -30,7 +30,6 @@ function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage
   };
 
   const nameStyle = {
-    // UPDATED: Increased font size
     fontSize: '2rem',
     fontWeight: 'bold',
     marginBottom: '5px'
@@ -50,7 +49,6 @@ function CharacterDisplay({ riderName, squireName, lore, shieldImage, riderImage
         <p style={nameStyle}>The Squire: {squireName}</p>
       </div>
       <hr style={{ border: '1px solid #555', margin: '15px 0' }} />
-      {/* UPDATED: Increased font size */}
       <p style={{ fontSize: '1.5rem' }}>{lore}</p>
     </div>
   );

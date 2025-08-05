@@ -5,7 +5,7 @@
 import React from 'react';
 import styles from './App.module.css';
 
-function RestartButton({ onRestart, playSelectionSound }) { // NEW: Receive the prop
+function RestartButton({ onRestart, playSelectionSound }) { 
   const buttonStyle = {
     backgroundColor: '#4A2C2A', 
     color: 'white',

@@ -5,7 +5,7 @@
 import React from 'react';
 import HouseCard from './HouseCard';
 
-function HouseSelector({ houses, onSelect, playSelectionSound }) { // NEW: Receive the prop
+function HouseSelector({ houses, onSelect, playSelectionSound }) { 
   return (
     <div style={{ textAlign: 'center' }}>
       <h2 style={{ color: 'white', marginBottom: '20px' }}>Choose Your House</h2>
@@ -15,7 +15,6 @@ function HouseSelector({ houses, onSelect, playSelectionSound }) { // NEW: Recei
             key={house.id}
             name={house.name}
             shieldImage={house.shieldImage}
-            // NEW: Call the prop inside the onSelect function
             onSelect={(name) => {
               playSelectionSound();
               onSelect(name);

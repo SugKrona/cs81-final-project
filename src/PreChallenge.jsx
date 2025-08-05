@@ -15,13 +15,11 @@ function PreChallenge({ challengeName, challengeDescription, onStart }) {
   };
 
   const titleStyle = {
-    // UPDATED: Increased font size
     fontSize: '3rem',
     marginBottom: '10px'
   };
 
   const descriptionStyle = {
-    // UPDATED: Increased font size
     fontSize: '2rem',
     marginBottom: '20px'
   };

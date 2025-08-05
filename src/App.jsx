@@ -37,7 +37,7 @@ const houseData = [
     shieldImage: '/images/HouseJavaskript.png',
     riderName: 'Duke Jax the Unyielding',
     squireName: 'Byte',
-    riderImage: '/images/DukeJax.png',
+    riderImage: '/images/Dukelax.png',
     squireImage: '/images/Byte.png',
     lore: "A new order that wields chaotic power from their three-headed dragon, breaking the logic of the old world. Their fearless rider, Duke Jax, a prodigy knight known for his agility, and his squire, Byte, who archives every battle detail, are the face of this powerful yet unpredictable force. They hail from a distant, futuristic land, and their modular magic allows them to adapt to any foe, making them a wild card in any tournament they enter."
   },
@@ -97,7 +97,7 @@ function App() {
   const mainThemeAudioRef = useRef(null);
   const loadingJingleAudioRef = useRef(null);
   const selectionSoundAudioRef = useRef(null);
-  const cheersAudioRef = useRef(null); // NEW: Reference for cheers sound
+  const cheersAudioRef = useRef(null);
 
   // Use an effect to control loading music
   useEffect(() => {
@@ -105,20 +105,42 @@ function App() {
       loadingJingleAudioRef.current.play();
     } else {
       loadingJingleAudioRef.current.pause();
-      loadingJingleAudioRef.current.currentTime = 0; // Rewind the audio
+      loadingJingleAudioRef.current.currentTime = 0; 
     }
   }, [gameState]);
 
-  // NEW: Use an effect to play cheers when results are displayed
+  // Use an effect to play cheers when results are displayed
   useEffect(() => {
     if (gameState === 'results') {
       cheersAudioRef.current.play();
     }
   }, [gameState]);
 
+  useEffect(() => {
+    const mainThemeAudio = mainThemeAudioRef.current;
+    if (mainThemeAudio) {
+        // Play the audio once the component mounts. Browser policies may still block this.
+        mainThemeAudio.play().catch(error => {
+            console.log("Autoplay was prevented. User interaction is needed.", error);
+        });
+        
+        // Add an event listener to restart the song when it ends
+        const handleAudioEnded = () => {
+            mainThemeAudio.play();
+        };
+
+        mainThemeAudio.addEventListener('ended', handleAudioEnded);
+
+        // Cleanup function to remove the event listener when the component unmounts
+        return () => {
+            mainThemeAudio.removeEventListener('ended', handleAudioEnded);
+        };
+    }
+  }, []);
+
   const playSelectionSound = () => {
     if (selectionSoundAudioRef.current) {
-      selectionSoundAudioRef.current.currentTime = 0; // Rewind to start
+      selectionSoundAudioRef.current.currentTime = 0; 
       selectionSoundAudioRef.current.play();
     }
   };
@@ -187,7 +209,6 @@ function App() {
     setFinalists([]);
     setFinalScores([]);
     setEliminatedHouses([]);
-    // NEW: Stop cheers audio when restarting
     if (cheersAudioRef.current) {
         cheersAudioRef.current.pause();
         cheersAudioRef.current.currentTime = 0;
@@ -198,14 +219,15 @@ function App() {
 
   return (
     <div className={styles.appContainer}>
-      <h1 style={{ color: 'white', textAlign: 'center' }}>Joust Simulator</h1>
+      <h1 className={styles.glowingElement} style={{ color: 'white' }}>Joust Simulator</h1>
+      <img className={styles.glowingElement} src="/images/titleknight.png" alt="Jousting Knight Title Logo" style={{ width: '150px', margin: '0 auto', display: 'block' }} />
 
       {/* Start State */}
       {gameState === 'start' && (
         <HouseSelector houses={houses} onSelect={handleHouseChoice} playSelectionSound={playSelectionSound} />
       )}
 
-      {/* Loading Bar State */}
+      {/* Loading State */}
       {gameState === 'challenge-running' && (
         <div style={{ textAlign: 'center', margin: '20px' }}>
           <p style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px', textAlign: 'center' }}>The challenge is underway!</p>
@@ -298,10 +320,10 @@ function App() {
       )}
       
       {/* Audio Elements */}
-      <audio ref={mainThemeAudioRef} src="/main-theme.mp3" autoPlay loop className={styles.hiddenAudio} />
+      <audio ref={mainThemeAudioRef} src="/main-theme.mp3" autoPlay className={styles.hiddenAudio} />
       <audio ref={loadingJingleAudioRef} src="/loading-jingle.mp3" loop className={styles.hiddenAudio} />
       <audio ref={selectionSoundAudioRef} src="/selection.mp3" className={styles.hiddenAudio} />
-      <audio ref={cheersAudioRef} src="/cheers.mp3" className={styles.hiddenAudio} /> {/* NEW Audio Element */}
+      <audio ref={cheersAudioRef} src="/cheers.mp3" className={styles.hiddenAudio} />
     </div>
   );
 }
