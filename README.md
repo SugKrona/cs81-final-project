@@ -31,3 +31,6 @@ This project is an very simple quick interactive web application that simulates 
 
 ### Video if it lets me upload
 - 
+
+https://github.com/user-attachments/assets/c7ca2b35-c61e-4425-8f1b-fc35b355bf04
+
